@@ -118,34 +118,53 @@ setInterval(() => {
 // Start typing effect when page loads
 window.addEventListener('load', typeWriter);
 
-// Burger Menu Functionality
-burgerMenu.addEventListener('click', (e) => {
-    e.stopPropagation(); // Prevent click from bubbling to document
-    burgerMenu.classList.toggle('active');
-    navLinks.classList.toggle('active');
-    // Prevent body scroll when menu is open
-    document.body.style.overflow = burgerMenu.classList.contains('active') ? 'hidden' : '';
-});
+// Burger Menu Functionality (robust / defensive)
+if (burgerMenu && navLinks) {
+    const toggleMenu = () => {
+        const open = burgerMenu.classList.toggle('active');
+        navLinks.classList.toggle('active', open);
+        document.body.classList.toggle('menu-open', open);
+        // set aria for accessibility
+        burgerMenu.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
 
-// Close menu when clicking a link
-document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', () => {
-        burgerMenu.classList.remove('active');
-        navLinks.classList.remove('active');
-        document.body.style.overflow = '';
+    burgerMenu.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMenu();
     });
-});
 
-// Close menu when clicking outside
-document.addEventListener('click', (e) => {
-    if (!burgerMenu.contains(e.target) && !navLinks.contains(e.target)) {
-        burgerMenu.classList.remove('active');
-        navLinks.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-});
+    // Close menu when clicking a navigation link
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            burgerMenu.classList.remove('active');
+            navLinks.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            burgerMenu.setAttribute('aria-expanded', 'false');
+        });
+    });
 
-// Prevent clicks inside nav-links from closing the menu
-navLinks.addEventListener('click', (e) => {
-    e.stopPropagation();
-});
+    // Close menu when clicking outside (anywhere on document)
+    document.addEventListener('click', (e) => {
+        if (!navLinks.contains(e.target) && !burgerMenu.contains(e.target)) {
+            burgerMenu.classList.remove('active');
+            navLinks.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            burgerMenu.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Close menu on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            burgerMenu.classList.remove('active');
+            navLinks.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            burgerMenu.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Prevent clicks inside the nav links area from bubbling to document
+    navLinks.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+}
