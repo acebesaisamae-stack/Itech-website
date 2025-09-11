@@ -21,12 +21,40 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Fix small right-side strip / horizontal overflow */
+html, body {
+    /* Prevent any horizontal scroll caused by full-bleed sections */
+    overflow-x: hidden;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     line-height: 1.6;
     color: var(--text-color);
     background-color: var(--background-color);
     transition: var(--transition);
+}
+
+/* Prefer 100% for section width and neutralize previous 100vw tricks */
+.section,
+.section#about,
+#home,
+#mission,
+#goals,
+#projects,
+.section#contact {
+    width: 100%;           /* avoid 100vw which can create scroll gaps when scrollbar present */
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+
+/* If you still need full-bleed backgrounds, use this pattern instead of width:100vw */
+.full-bleed {
+    width: 100%;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    box-sizing: border-box;
 }
 
 /* Navigation */
@@ -95,115 +123,429 @@ nav {
 .burger-menu {
     display: none;
     cursor: pointer;
-    z-index: 1101;
-    width: 36px;
-    height: 36px;
+    z-index: 1001;
+    width: 30px;
+    height: 30px;
     position: relative;
+    transition: all 0.3s ease-in-out;
 }
 
 .burger-icon {
     width: 100%;
     height: 100%;
     position: relative;
+    transition: all 0.3s ease-in-out;
 }
 
 .burger-icon span {
     display: block;
     position: absolute;
-    height: 3px;
+    height: 2px;
     width: 100%;
-    background: #c86b7b;
+    background: hsl(348, 43%, 60%);
     border-radius: 2px;
-    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+    transition: all 0.3s ease-in-out;
 }
 
-.burger-icon span:nth-child(1) { top: 8px; }
-.burger-icon span:nth-child(2) { top: 16px; }
-.burger-icon span:nth-child(3) { top: 24px; }
-
-/* Animate burger to X */
-.burger-menu.active .burger-icon span:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
+.burger-icon span:first-child {
+    top: 6px;
 }
+
+.burger-icon span:nth-child(2) {
+    top: 14px;
+}
+
+.burger-icon span:last-child {
+    top: 22px;
+}
+
+/* Active Burger Animation */
+.burger-menu.active .burger-icon span {
+    background: hsl(348, 43%, 65%);
+}
+
+.burger-menu.active .burger-icon span:first-child {
+    transform: rotate(45deg);
+    top: 14px;
+}
+
 .burger-menu.active .burger-icon span:nth-child(2) {
     opacity: 0;
+    transform: translateX(-10px);
 }
-.burger-menu.active .burger-icon span:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+
+.burger-menu.active .burger-icon span:last-child {
+    transform: rotate(-45deg);
+    top: 14px;
 }
 
 /* Mobile Navigation */
 @media (max-width: 768px) {
-    /* show burger */
     .burger-menu {
         display: block;
     }
 
-    /*
-      Mobile overlay navigation (full-screen) — replaces off-canvas variant
-      so the three-line burger reliably reveals a full-screen menu.
-    */
     .nav-links {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        width: 90%;
+        max-width: 400px;
+        background: rgba(255, 255, 255, 0.95);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        padding: 2rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease-in-out;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(219, 112, 147, 0.15);
+        border: 2px solid hsl(350, 100%, 94%);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+    }
+
+    .nav-links::before {
+        content: '';
         position: fixed;
         top: 0;
         left: 0;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 1.5rem;
-        background: linear-gradient(180deg, rgba(255, 245, 247, 0.98), rgba(255, 240, 245, 0.95));
-        transform: translateY(-100%);
-        transition: transform 0.28s cubic-bezier(.4,0,.2,1);
-        z-index: 1200;
-        padding-top: 4.5rem; /* leave space for nav bar */
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 240, 245, 0.8);
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
 
     .nav-links.active {
-        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    .nav-links.active::before {
+        opacity: 1;
     }
 
     .nav-links a {
-        width: auto;
-        padding: 0.9rem 1.25rem;
-        font-size: 1.15rem;
+        font-size: 1.1rem;
+        padding: 0.8rem 1.5rem;
+        width: 100%;
+        text-align: center;
+        border-radius: 8px;
+        transition: all 0.3s ease;
         color: var(--secondary-color);
-        background: transparent;
-        border-radius: 10px;
-        text-decoration: none;
-        font-weight: 700;
     }
 
-    .nav-links a:hover,
-    .nav-links a.active {
-        color: #fff;
-        background-color: var(--secondary-color);
-    }
-
-    /* ensure desktop nav in DOM does not interfere visually */
-    nav .nav-links {
-        box-shadow: none;
-    }
-
-    /* prevent page scroll when menu open (JS toggles .menu-open on body) */
-    body.menu-open {
-        overflow: hidden;
-        height: 100vh;
-        touch-action: none;
+    .nav-links a:hover {
+        background-color: hsl(350, 100%, 97%);
+        transform: translateY(-2px);
+        color: hsl(348, 43%, 45%);
     }
 }
 
-/* ensure full-width sections to avoid gaps when using 100vw elsewhere */
-.section,
-#home,
-.section#about,
-#mission,
-#goals {
-    width: 100%;
-    left: 0;
-    right: 0;
+@media (max-width: 480px) {
+    .nav-links {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .nav-links a {
+        font-size: 1rem;
+        padding: 0.7rem 1.2rem;
+    }
+}
+
+/* Mobile-First Media Queries */
+@media (max-width: 768px) {
+    /* Navigation */
+    nav {
+        padding: 0.8rem 4%;
+        height: 70px;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem;
+        padding: 0.5rem;
+    }
+
+    .nav-links a {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    /* Hero Section */
+    .hero h1 {
+        font-size: 2.2rem;
+        padding: 0 1rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+    }
+
+    .hero span {
+        font-size: 1.5rem;
+    }
+
+    /* About Section */
+    .about-container {
+    flex-direction: column;
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+
+    .about-content h2 {
+        font-size: 2rem;
+    }
+
+    .logo-circle {
+        width: 200px;
+        height: 200px;
+    }
+
+    /* Mission Section */
+    .mission-title {
+        font-size: 2rem;
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    .mission-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+
+    .mission-box {
+        padding: 1.5rem;
+    }
+
+    .mission-box h3 {
+        font-size: 1.8rem;
+    }
+
+    .mission-box p {
+        font-size: 1rem;
+    }
+
+    /* Goals Section */
+    .goals-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .goal-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .goal-card i {
+        font-size: 2rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .goal-card h3 {
+        font-size: 1.2rem;
+        margin: 0.3rem 0;
+    }
+
+    .goal-card p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    /* Team Section */
+    #team h2 {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    #team .script-text {
+        font-size: 3rem;
+    }
+
+    .team-intro {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .team-grid {
+        padding: 2rem 1rem;
+    }
+
+    .team-members {
+        gap: 1.5rem;
+    }
+
+    .team-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .team-row-1 .member img,
+    .team-row-2 .member img,
+    .team-row-3 .member img,
+    .team-row-4 .member img {
+        width: 160px;
+        height: 160px;
+    }
+
+    .member {
+        padding: 1rem;
+    }
+
+    .member h3 {
+        font-size: 0.85rem;
+    }
+
+    .member p {
+        font-size: 1rem;
+    }
+
+    /* Projects Section */
+    #projects h2 {
+        font-size: 2.5rem;
+    }
+
+    #projects .script-text {
+        font-size: 3rem;
+    }
+
+    .projects-grid {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .project-card {
+        margin: 0 1rem;
+    }
+
+    .project-card img {
+        height: 200px;
+    }
+
+    .project-card h3 {
+        font-size: 1.3rem;
+        margin: 1rem;
+    }
+
+    /* Contact Section */
+    .contact-container {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+
+    .contact-info h3 {
+        font-size: 1.5rem;
+    }
+
+    .contact-info p {
+        font-size: 0.9rem;
+    }
+
+    /* General Section Headers */
+    .section h2 {
+        font-size: 2.5rem !important;
+        margin-bottom: 2rem;
+        padding: 0 1rem;
+    }
+
+    .script-text {
+        font-size: 3rem !important;
+    }
+
+    /* Section Spacing */
+    .section {
+        padding: 4rem 0;
+        margin-top: 70px;
+    }
+
+    #home.section {
+        padding-top: 70px;
+    }
+
+    .logo-text {
+        font-size: 1.4rem;
+    }
+    
+    .logo {
+        width: 45px;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+    .nav-links {
+        gap: 0.5rem;
+    }
+
+    .nav-links a {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+    }
+
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .team-row-1 .member img,
+    .team-row-2 .member img,
+    .team-row-3 .member img,
+    .team-row-4 .member img {
+        width: 140px;
+        height: 140px;
+    }
+
+    .member h3 {
+        font-size: 0.8rem;
+    }
+
+    .member p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Tablet Devices */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .nav-links {
+        gap: 1.5rem;
+    }
+
+    .nav-links a {
+        font-size: 0.85rem;
+    }
+
+    .team-row-1 .member img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .team-row-2 .member img,
+    .team-row-3 .member img {
+        width: 180px;
+        height: 180px;
+    }
+
+    .team-row-4 .member img {
+        width: 160px;
+        height: 160px;
+    }
 }
 
 /* Sections */
@@ -314,36 +656,6 @@ nav {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.triangle-decoration {
-    position: absolute;
-    bottom: -40px;
-    right: -40px;
-    z-index: 1;
-}
-
-.triangle-decoration::before,
-.triangle-decoration::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
-}
-
-.triangle-decoration::before {
-    border-width: 60px 0 0 60px;
-    border-color: transparent transparent transparent var(--accent-pink);
-    bottom: 0;
-    right: 0;
-}
-
-.triangle-decoration::after {
-    border-width: 40px 0 0 40px;
-    border-color: transparent transparent transparent var(--primary-color);
-    bottom: -20px;
-    right: -20px;
 }
 
 /* Hero Section */
@@ -985,14 +1297,20 @@ nav {
 
 /* CONTACT SECTION LAYOUT */
 .section#contact {
-    background: linear-gradient(120deg, #ffe0e6 0%, #fbe6f7);
+    /* make background span the full viewport width even when layout is centered */
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    box-sizing: border-box;
+    /* keep existing styles */
+    background: linear-gradient(120deg, #ffe0e6 0%, #fbe6f7 100%);
     min-height: 100vh;
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;
-    margin: 0;
+    position: relative;
+    z-index: 0;
 }
 
 .contact-container {
@@ -1090,6 +1408,17 @@ nav {
     transform: translateY(-2px) scale(1.03);
 }
 
+.contact-btn .arrow {
+    font-size: 1.3em;
+    margin-left: 0.5em;
+    display: inline-block;
+    transition: transform 0.2s;
+}
+
+.contact-btn:hover .arrow {
+    transform: translateX(4px);
+}
+
 .contact-right {
     flex: 1 1 0;
     display: flex;
@@ -1108,15 +1437,12 @@ nav {
 
 /* CONTACT SECTION LANDSCAPE LAYOUT */
 .section#contact {
-    background: linear-gradient(120deg, #ffe0e6 0%, #fbe6f7);
+    background: linear-gradient(120deg, #ffe0e6 0%, #fbe6f7 100%);
     min-height: 100vh;
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 .contact-card {
@@ -1197,6 +1523,7 @@ nav {
     min-width: 120px;
     width: fit-content;
     border: none;
+    text-decoration: none;
     border-radius: 2rem;
     background: linear-gradient(90deg, #f7b6c8 0%, #fcae67 100%);
     color: #fff;
@@ -1352,7 +1679,6 @@ nav {
     align-items: center;
     gap: 0.5rem;
     box-shadow: none;
-    text-decoration: none;
     transition: 
         background 0.2s,
         color 0.2s,

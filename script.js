@@ -168,3 +168,24 @@ if (burgerMenu && navLinks) {
         e.stopPropagation();
     });
 }
+
+burger.addEventListener('click', () => {
+    burger.classList.toggle('active');   // animate burger into X
+    navLinks.classList.toggle('active'); // show/hide nav links
+    document.body.classList.toggle('menu-open'); // prevent background scroll
+});
+
+// Optional: close menu when a nav link is clicked (mobile only)
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        burger.classList.remove('active');
+        navLinks.classList.remove('active');
+        document.body.classList.remove('menu-open');
+    });
+});
+
+burger.addEventListener('click', () => {
+    burger.classList.toggle('active');   // burger ⇄ X
+    navLinks.classList.toggle('active'); // show/hide menu
+    document.body.classList.toggle('menu-open'); // lock scroll
+});
