@@ -186,7 +186,8 @@
         <div class="contact-card">
             <div class="contact-info">
                 <h3 class="contact-title">Get in touch</h3>
-                <form class="contact-form">
+                <form action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+                    <input type="hidden" name="access_key" value="d2769fc5-bb51-4288-a736-40c38bb8504d">
                     <input type="text" name="name" placeholder="Your Name" class="contact-inputs" required>
                     <input type="email" name="email" placeholder="Your Email" class="contact-inputs" required>
                     <textarea name="message" placeholder="Your Message" class="contact-inputs" required></textarea>

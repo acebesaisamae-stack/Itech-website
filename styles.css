@@ -1,10 +1,11 @@
 :root {
-    --primary-color: hsl(0, 100%, 85%);
-    --secondary-color: hsl(348, 43%, 51%);
-    --background-color: hsl(0, 100%, 98%);
-    --text-color: hsl(348, 43%, 51%);
-    --accent-pink: hsl(350, 100%, 88%);
-    --soft-pink: hsl(350, 100%, 94%);
+    --primary-color: #C5ADC5;
+    --secondary-color: #13131A;
+    --background-color: #FAF4F4;
+    --text-color: #13131A;
+    --accent-pink: #FAF4F4;
+    --not-purely-black-: #13131A;
+    --soft-gray: #f2f2f2; /* added soft gray */
     --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     --hover-transform: translateY(-8px) scale(1.02);
@@ -116,7 +117,7 @@ nav {
 
 .nav-links a:hover {
     color: var(--secondary-color);
-    background-color: var(--soft-pink);
+    background-color: var(--soft-gray);
 }
 
 /* Burger Menu */
@@ -187,65 +188,56 @@ nav {
 
     .nav-links {
         position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.9);
-        width: 90%;
-        max-width: 400px;
-        background: rgba(255, 255, 255, 0.95);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 1.5rem;
-        padding: 2rem;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease-in-out;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(219, 112, 147, 0.15);
-        border: 2px solid hsl(350, 100%, 94%);
-        backdrop-filter: blur(8px);
-        z-index: 1000;
-    }
-
-    .nav-links::before {
-        content: '';
-        position: fixed;
         top: 0;
         left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(255, 240, 245, 0.8);
-        z-index: -1;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.25rem;
+        padding: 5.5rem 1.25rem 2rem;
+        background: rgba(255,255,255,0.12);             /* translucent base */
+        backdrop-filter: blur(8px) saturate(120%);       /* blur + slight saturation */
+        -webkit-backdrop-filter: blur(8px) saturate(120%);
+        border-top: 1px solid rgba(255,255,255,0.06);
+        z-index: 1200;
+        transform: translateY(-6%);
+        transition: transform 280ms cubic-bezier(.4,0,.2,1), opacity 220ms;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        pointer-events: none;
     }
 
     .nav-links.active {
+        transform: translateY(0);
         opacity: 1;
-        visibility: visible;
-        transform: translate(-50%, -50%) scale(1);
+        pointer-events: auto;
     }
 
-    .nav-links.active::before {
-        opacity: 1;
-    }
-
+    /* keep link visuals readable on the frosted background */
     .nav-links a {
-        font-size: 1.1rem;
-        padding: 0.8rem 1.5rem;
-        width: 100%;
-        text-align: center;
+        color: #13131A;
+        background: transparent;
+        padding: 0.8rem 1.2rem;
         border-radius: 8px;
-        transition: all 0.3s ease;
-        color: var(--secondary-color);
     }
 
-    .nav-links a:hover {
-        background-color: hsl(350, 100%, 97%);
-        transform: translateY(-2px);
-        color: hsl(348, 43%, 45%);
+    /* subtle backdrop close affordance */
+    .nav-links::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+        border-radius: inherit;
     }
+}
+
+/* keep body scroll locked when menu open */
+body.menu-open {
+    overflow: hidden;
+    touch-action: none;
 }
 
 @media (max-width: 480px) {
@@ -1159,28 +1151,29 @@ nav {
 }
 
 @media (max-width: 768px) {
-    .team-members {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
-    }
-    
+    /* Keep desktop pyramid but center rows on mobile */
+    .team-grid { width: 100%; }
+
     .team-row {
+        display: flex;
+        flex-direction: row !important; /* allow side-by-side members when space permits */
+        justify-content: center !important; /* center the row */
         gap: 1.5rem;
-        margin-bottom: 2rem;
         flex-wrap: wrap;
+        margin-bottom: 2rem;
     }
-    
-    .member img {
-        width: 140px;
-        height: 140px;
+
+    /* Ensure the top single member remains centered */
+    .team-row-1 {
+        justify-content: center;
     }
-    
-    .member h3 {
-    font-size: 0.9rem;
-    }
-    
-    .member p {
-        font-size: 1rem;
+
+    /* Constrain member width so two members sit nicely centered */
+    .team-row .member {
+        margin: 0 auto;
+        max-width: 320px;
+        width: 100%;
+        box-sizing: border-box;
     }
 }
 
@@ -1302,8 +1295,8 @@ nav {
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     box-sizing: border-box;
-    /* keep existing styles */
-    background: linear-gradient(120deg, #ffe0e6 0%, #fbe6f7 100%);
+    /* updated to requested solid color */
+    background: #FAF4F4;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -1340,15 +1333,13 @@ nav {
 }
 
 .contact-info h3 {
-    color: #a259b5;
+    color: #13131A !important;
+    border-bottom: 4px solid #13131A !important;
     font-size: 2.2rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
     font-family: 'Poppins', sans-serif;
     letter-spacing: 0.5px;
-    border-bottom: 4px solid #e7a3b8;
-    display: inline-block;
-    padding-bottom: 0.2em;
 }
 
 .contact-left {
@@ -1373,7 +1364,7 @@ nav {
 }
 
 .contact-inputs:focus {
-    border: 2px solid #a259b5;
+    border: 2px solid #13131A !important;
     background: #f9f6fa;
 }
 
@@ -1437,7 +1428,7 @@ nav {
 
 /* CONTACT SECTION LANDSCAPE LAYOUT */
 .section#contact {
-    background: linear-gradient(120deg, #ffe0e6 0%, #fbe6f7 100%);
+    background: #FAF4F4;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -1507,7 +1498,7 @@ nav {
 }
 
 .contact-inputs:focus {
-    border: 2px solid #a259b5;
+    border: 2px solid #13131A !important;
     background: #f9f6fa;
 }
 
@@ -1663,13 +1654,25 @@ nav {
     }
 }
 
+/* Ensure inline/italic/highlight inside hero become white and readable */
+.section#home .hero p,
+.section#home .hero p span,
+.section#home .hero p em,
+.section#home .hero p i,
+.section#home .hero p .script,
+.section#home .hero .typing-text,
+.section#home .hero .fancy {
+    color: #ffffff !important;
+    text-shadow: 0 4px 18px rgba(0,0,0,0.6) !important;
+}
+
 /* Universal button style for Contact Us and Submit */
 .contact-btn,
 .contact-form .contact-btn,
 .hero .contact-btn {
     background: transparent;
-    color: #c86b7b;
-    border: 2px solid #c86b7b;
+    color: #13131A;
+    border: 2px solid #13131A;
     border-radius: 2rem;
     padding: 0.7rem 2.2rem;
     font-size: 1.1rem;
@@ -1687,7 +1690,234 @@ nav {
 
 .contact-btn:hover,
 .hero .contact-btn:hover {
-    background: #c86b7b;
+    background: #13131A;
     color: #fff;
     transform: translateY(-2px) scale(1.03);
+}
+
+/* Make contact form submit hover use #13131A (dark) */
+.contact-form .contact-btn:hover,
+.contact-btn[type="submit"]:hover,
+button[type="submit"].contact-btn:hover,
+.contact-card .contact-btn:hover {
+    background: #13131A !important;
+    color: #ffffff !important;
+    border-color: #13131A !important;
+}
+
+/* Home section: text and button color adjustments */
+.hero h1,
+.hero p,
+.hero span {
+    color: #13131A !important;
+}
+
+.hero .contact-btn {
+    color: #13131A !important;
+    background: transparent !important;
+    border: 2px solid #13131A !important;
+}
+
+/* Hover state for clear interaction */
+.hero .contact-btn:hover {
+    background: #13131A !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) scale(1.03);
+}
+
+/* Contact card / "Get in touch" color and border overrides */
+.contact-info h3 {
+    color: #13131A !important;
+    border-bottom: 4px solid #13131A !important;
+}
+
+.contact-card,
+.contact-info,
+.contact-inputs {
+    border-color: #13131A !important;
+}
+
+/* inputs focus border */
+.contact-inputs:focus {
+    border: 2px solid #13131A !important;
+}
+
+/* small decorative line under section headings if present */
+.section::before {
+    background: linear-gradient(90deg, var(--primary-color), #13131A, var(--accent-pink));
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    /* Stack rows vertically and center everything */
+    .team-members {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        width: 100%;
+        padding: 0 1rem;
+        box-sizing: border-box;
+    }
+
+    .team-row {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+        box-sizing: border-box;
+    }
+
+    /* Ensure each member centers and has a reasonable max width */
+    .team-row .member {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1.25rem;
+        padding: 5.5rem 1.25rem 2rem;
+        background: rgba(255,255,255,0.12);             /* translucent base */
+        backdrop-filter: blur(8px) saturate(120%);       /* blur + slight saturation */
+        -webkit-backdrop-filter: blur(8px) saturate(120%);
+        border-top: 1px solid rgba(255,255,255,0.06);
+        z-index: 1200;
+        transform: translateY(-6%);
+        transition: transform 280ms cubic-bezier(.4,0,.2,1), opacity 220ms;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .nav-links.active {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* keep link visuals readable on the frosted background */
+    .nav-links a {
+        color: #13131A;
+        background: transparent;
+        padding: 0.8rem 1.2rem;
+        border-radius: 8px;
+    }
+
+    /* subtle backdrop close affordance */
+    .nav-links::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+        border-radius: inherit;
+    }
+}
+
+/* Ensure name/email/message input text uses #13131A */
+.contact-inputs,
+input.contact-inputs,
+textarea.contact-inputs,
+input[type="text"].contact-inputs,
+input[type="email"].contact-inputs {
+    color: #13131A !important;
+    caret-color: #13131A !important;
+}
+
+/* Subtle placeholder color */
+.contact-inputs::placeholder,
+input.contact-inputs::placeholder,
+textarea.contact-inputs::placeholder {
+    color: rgba(19, 19, 26, 0.45) !important;
+}
+
+/* Keep focus / active state consistent */
+.contact-inputs:focus,
+input.contact-inputs:focus,
+textarea.contact-inputs:focus {
+    color: #13131A !important;
+    caret-color: #13131A !important;
+    border-color: #13131A !important;
+}
+
+/* Home section: use supplied hero image as background (only for #home) */
+.section#home {
+    /* update path if you store the file in images/ */
+    background-image: url("wmremove-transformed.jpeg"), linear-gradient(#FAF4F4, #FAF4F4);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-color: transparent;
+    width: 100%;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 0;
+}
+
+/* Avoid fixed attachment on mobile for performance/placement */
+@media (max-width: 768px) {
+    .section#home {
+        background-attachment: scroll;
+        background-position: center top;
+    }
+}
+
+/* Home: sharper background + contrast overlay, readable white text */
+.section#home {
+    background-image:
+        /* dark overlay for contrast */
+        linear-gradient(rgba(7,6,10,0.48), rgba(7,6,10,0.28)),
+        url("wmremove-transformed.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;         /* keep cover for full-bleed look */
+    background-position: center center;
+    min-height: 100vh;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 0;
+}
+
+/* Make the hero text and button clearly visible on top of the image */
+.section#home .hero h1,
+.section#home .hero p,
+.section#home .hero .contact-btn {
+    color: #ffffff !important;
+    text-shadow: 0 4px 18px rgba(0,0,0,0.6);
+}
+
+/* Button border adjusted for better contrast */
+.section#home .hero .contact-btn {
+    background: transparent !important;
+    border: 2px solid rgba(255,255,255,0.9) !important;
+}
+
+/* Slightly stronger overlay on small screens (image crops more) */
+@media (max-width: 768px) {
+    .section#home {
+        background-image:
+            linear-gradient(rgba(7,6,10,0.60), rgba(7,6,10,0.40)),
+            url("wmremove-transformed.jpeg");
+        background-position: center top;
+    }
 }

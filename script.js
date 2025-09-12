@@ -5,6 +5,7 @@ const typingText = document.querySelector('.typing-text');
 const cursor = document.querySelector('.cursor');
 const sections = document.querySelectorAll('.section');
 const nav = document.querySelector('nav');
+const navClose = document.querySelector('.nav-close');
 
 // Navigation scroll effect
 window.addEventListener('scroll', () => {
@@ -120,12 +121,25 @@ window.addEventListener('load', typeWriter);
 
 // Burger Menu Functionality (robust / defensive)
 if (burgerMenu && navLinks) {
+    // Defensive hookup for close button
+    if (navClose) {
+        navClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            burgerMenu.classList.remove('active');
+            navLinks.classList.remove('active');
+            document.body.classList.remove('menu-open');
+            burgerMenu.setAttribute('aria-expanded', 'false');
+            navLinks.setAttribute('aria-hidden', 'true');
+        });
+    }
+
+    // Ensure aria updates when opening/closing via burger
     const toggleMenu = () => {
         const open = burgerMenu.classList.toggle('active');
         navLinks.classList.toggle('active', open);
         document.body.classList.toggle('menu-open', open);
-        // set aria for accessibility
         burgerMenu.setAttribute('aria-expanded', open ? 'true' : 'false');
+        navLinks.setAttribute('aria-hidden', !open ? 'true' : 'false');
     };
 
     burgerMenu.addEventListener('click', (e) => {
