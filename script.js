@@ -1,4 +1,3 @@
-// DOM Elements
 const burgerMenu = document.querySelector('.burger-menu');
 const navLinks = document.querySelector('.nav-links');
 const typingText = document.querySelector('.typing-text');
@@ -7,7 +6,6 @@ const sections = document.querySelectorAll('.section');
 const nav = document.querySelector('nav');
 const navClose = document.querySelector('.nav-close');
 
-// Navigation scroll effect
 window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
         nav.style.background = 'rgba(255, 255, 255, 0.98)';
@@ -18,7 +16,6 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Smooth scroll for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -28,7 +25,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Add scroll reveal animations
 const revealElements = document.querySelectorAll('.section, .member, .goal-card, .project-card');
 
 const revealOnScroll = () => {
@@ -43,19 +39,15 @@ const revealOnScroll = () => {
     });
 };
 
-// Initialize elements
 revealElements.forEach(element => {
     element.style.opacity = '0';
     element.style.transform = 'translateY(50px)';
     element.style.transition = 'all 0.6s ease-out';
 });
 
-// Add scroll event listener
 window.addEventListener('scroll', revealOnScroll);
-// Trigger initial reveal
 revealOnScroll();
 
-// Add hover effects to team members
 const teamMembers = document.querySelectorAll('.member');
 teamMembers.forEach(member => {
     member.addEventListener('mouseenter', () => {
@@ -68,14 +60,12 @@ teamMembers.forEach(member => {
     });
 });
 
-// Add parallax effect to hero section
 const hero = document.querySelector('#home');
 window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
     hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
 });
 
-// Add active state to navigation links
 window.addEventListener('scroll', () => {
     let current = '';
     
@@ -96,7 +86,6 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// Typing effect variables and function
 let textToType = "Empowering Innovation Through Technology";
 let charIndex = 0;
 let isTyping = true;
@@ -110,18 +99,14 @@ function typeWriter() {
     }
 }
 
-// Cursor blinking
 setInterval(() => {
     cursorVisible = !cursorVisible;
     cursor.style.opacity = cursorVisible ? '1' : '0';
 }, 500);
 
-// Start typing effect when page loads
 window.addEventListener('load', typeWriter);
 
-// Burger Menu Functionality (robust / defensive)
 if (burgerMenu && navLinks) {
-    // Defensive hookup for close button
     if (navClose) {
         navClose.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -133,7 +118,6 @@ if (burgerMenu && navLinks) {
         });
     }
 
-    // Ensure aria updates when opening/closing via burger
     const toggleMenu = () => {
         const open = burgerMenu.classList.toggle('active');
         navLinks.classList.toggle('active', open);
@@ -147,7 +131,6 @@ if (burgerMenu && navLinks) {
         toggleMenu();
     });
 
-    // Close menu when clicking a navigation link
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             burgerMenu.classList.remove('active');
@@ -157,7 +140,6 @@ if (burgerMenu && navLinks) {
         });
     });
 
-    // Close menu when clicking outside (anywhere on document)
     document.addEventListener('click', (e) => {
         if (!navLinks.contains(e.target) && !burgerMenu.contains(e.target)) {
             burgerMenu.classList.remove('active');
@@ -167,7 +149,6 @@ if (burgerMenu && navLinks) {
         }
     });
 
-    // Close menu on Escape
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             burgerMenu.classList.remove('active');
@@ -177,19 +158,18 @@ if (burgerMenu && navLinks) {
         }
     });
 
-    // Prevent clicks inside the nav links area from bubbling to document
+    
     navLinks.addEventListener('click', (e) => {
         e.stopPropagation();
     });
 }
 
 burger.addEventListener('click', () => {
-    burger.classList.toggle('active');   // animate burger into X
-    navLinks.classList.toggle('active'); // show/hide nav links
-    document.body.classList.toggle('menu-open'); // prevent background scroll
+    burger.classList.toggle('active');
+    navLinks.classList.toggle('active'); 
+    document.body.classList.toggle('menu-open');
 });
 
-// Optional: close menu when a nav link is clicked (mobile only)
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         burger.classList.remove('active');
@@ -199,7 +179,7 @@ document.querySelectorAll('.nav-links a').forEach(link => {
 });
 
 burger.addEventListener('click', () => {
-    burger.classList.toggle('active');   // burger ⇄ X
-    navLinks.classList.toggle('active'); // show/hide menu
-    document.body.classList.toggle('menu-open'); // lock scroll
+    burger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+    document.body.classList.toggle('menu-open');
 });

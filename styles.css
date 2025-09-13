@@ -5,7 +5,7 @@
     --text-color: #13131A;
     --accent-pink: #FAF4F4;
     --not-purely-black-: #13131A;
-    --soft-gray: #f2f2f2; /* added soft gray */
+    --soft-gray: #f2f2f2;
     --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     --hover-transform: translateY(-8px) scale(1.02);
@@ -22,9 +22,7 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Fix small right-side strip / horizontal overflow */
 html, body {
-    /* Prevent any horizontal scroll caused by full-bleed sections */
     overflow-x: hidden;
 }
 
@@ -32,43 +30,10 @@ body {
     font-family: 'Poppins', sans-serif;
     line-height: 1.6;
     color: var(--text-color);
-    background-color: #B4B4B4 !important;
+    background-color: var(--background-color);
     transition: var(--transition);
 }
 
-/* Section backgrounds */
-.section,
-.section#about,
-#home,
-#mission,
-#goals,
-#projects,
-.section#contact,
-#contact,
-#projects,
-#team,
-#goals,
-#mission {
-    background-color: #B4B4B4 !important;
-    background-image: none !important;
-}
-
-/* Remove background images from #home */
-#home,
-#home.section,
-.section#home {
-    background: #B4B4B4 !important;
-    background-image: none !important;
-}
-
-/* Contact section background */
-.section#contact,
-#contact {
-    background: #B4B4B4 !important;
-    background-color: #B4B4B4 !important;
-}
-
-/* Prefer 100% for section width and neutralize previous 100vw tricks */
 .section,
 .section#about,
 #home,
@@ -76,13 +41,12 @@ body {
 #goals,
 #projects,
 .section#contact {
-    width: 100%;           /* avoid 100vw which can create scroll gaps when scrollbar present */
+    width: 100%;          
     margin-left: 0;
     margin-right: 0;
     box-sizing: border-box;
 }
 
-/* If you still need full-bleed backgrounds, use this pattern instead of width:100vw */
 .full-bleed {
     width: 100%;
     margin-left: calc(50% - 50vw);
@@ -148,8 +112,8 @@ nav {
 }
 
 .nav-links a:hover {
-    color: var(--secondary-color);
-    background-color: var(--soft-gray);
+    color: white;
+    background-color: var(--not-purely-black-);
 }
 
 /* Burger Menu */
@@ -226,14 +190,12 @@ nav {
         height: 100vh;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        justify-content: flex-end;
+        align-items: flex-end;
         gap: 1.25rem;
         padding: 5.5rem 1.25rem 2rem;
-        background: rgba(255,255,255,0.12);             /* translucent base */
-        backdrop-filter: blur(8px) saturate(120%);       /* blur + slight saturation */
-        -webkit-backdrop-filter: blur(8px) saturate(120%);
-        border-top: 1px solid rgba(255,255,255,0.06);
+        background: #C5ADC5;               
+
         z-index: 1200;
         transform: translateY(-6%);
         transition: transform 280ms cubic-bezier(.4,0,.2,1), opacity 220ms;
@@ -247,7 +209,6 @@ nav {
         pointer-events: auto;
     }
 
-    /* keep link visuals readable on the frosted background */
     .nav-links a {
         color: #13131A;
         background: transparent;
@@ -255,7 +216,7 @@ nav {
         border-radius: 8px;
     }
 
-    /* subtle backdrop close affordance */
+
     .nav-links::before {
         content: "";
         position: absolute;
@@ -266,7 +227,6 @@ nav {
     }
 }
 
-/* keep body scroll locked when menu open */
 body.menu-open {
     overflow: hidden;
     touch-action: none;
@@ -906,7 +866,7 @@ body.menu-open {
 
 /* Goals Section */
 #goals {
-    background-color: #B4B4B4 !important;
+    background-color: var(--background-color);
     padding: 0;
     min-height: 100vh;
     width: 100vw;
@@ -918,8 +878,6 @@ body.menu-open {
 }
 
 .goals-container {
-    /* keep the container background as is */
-    background-color: #B4B4B4; /* changed from var(--background-color) to #B4B4B4 */
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
@@ -927,35 +885,7 @@ body.menu-open {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
     padding: 2rem;
-    justify-items: center;
-    align-items: stretch; /* Make all cards the same height */
-}
-
-.goal-card {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 1.5rem 1rem;
-    text-align: center;
-    border-radius: 12px;
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
-    border: 1px solid var(--secondary-color);
-    position: relative;
-    overflow: hidden;
-    width: 100%;           /* Make all cards fill the column width */
-    max-width: 540px;      /* Optional: set a max-width for large screens */
-    min-height: 170px;     /* Optional: ensure minimum height for uniformity */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-/* Center the last goal-card if odd number of cards */
-.goals-container > .goal-card:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: 50%; /* Make it the same width as other cards */
-    min-width: 320px;
-    max-width: 540px;
+    background-color: var(--background-color);
 }
 
 .goals-container h2 {
@@ -976,6 +906,46 @@ body.menu-open {
     border: 1px solid var(--secondary-color);
     position: relative;
     overflow: hidden;
+}
+
+.goal-card i {
+    color: var(--secondary-color);
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    position: relative;
+    z-index: 1;
+    transition: var(--transition);
+}
+
+.goal-card h3 {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+    margin: 0.3rem 0;
+    position: relative;
+    z-index: 1;
+    transition: color 0.4s ease;
+}
+
+.goal-card p {
+    color: var(--text-color);
+    line-height: 1.4;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+    margin-top: 0.5rem;
+}
+
+.goals-container .goal-card:last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    align-self: start;
+}
+
+@media (max-width: 768px) {
+    .goals-container .goal-card:last-child {
+        grid-column: auto;
+        justify-self: stretch;
+    }
 }
 
 /* Mobile adjustments */
@@ -1186,24 +1156,21 @@ body.menu-open {
 }
 
 @media (max-width: 768px) {
-    /* Keep desktop pyramid but center rows on mobile */
     .team-grid { width: 100%; }
 
     .team-row {
         display: flex;
-        flex-direction: row !important; /* allow side-by-side members when space permits */
-        justify-content: center !important; /* center the row */
+        flex-direction: row !important;
+        justify-content: center !important;
         gap: 1.5rem;
         flex-wrap: wrap;
         margin-bottom: 2rem;
     }
 
-    /* Ensure the top single member remains centered */
     .team-row-1 {
         justify-content: center;
     }
 
-    /* Constrain member width so two members sit nicely centered */
     .team-row .member {
         margin: 0 auto;
         max-width: 320px;
@@ -1325,12 +1292,10 @@ body.menu-open {
 
 /* CONTACT SECTION LAYOUT */
 .section#contact {
-    /* make background span the full viewport width even when layout is centered */
     width: 100vw;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     box-sizing: border-box;
-    /* updated to requested solid color */
     background: #FAF4F4;
     min-height: 100vh;
     display: flex;
@@ -1429,7 +1394,6 @@ body.menu-open {
 }
 
 .contact-btn:hover {
-    /* No color change, just animation */
     background: linear-gradient(90deg, #f7b6c8 0%, #fcae67 100%);
     transform: translateY(-2px) scale(1.03);
 }
@@ -1564,7 +1528,6 @@ body.menu-open {
 }
 
 .contact-btn:hover {
-    /* No color change, just animation */
     background: linear-gradient(90deg, #f7b6c8 0%, #fcae67 100%);
     transform: translateY(-2px) scale(1.03);
 }
@@ -1689,7 +1652,6 @@ body.menu-open {
     }
 }
 
-/* Ensure inline/italic/highlight inside hero become white and readable */
 .section#home .hero p,
 .section#home .hero p span,
 .section#home .hero p em,
@@ -1701,7 +1663,6 @@ body.menu-open {
     text-shadow: 0 4px 18px rgba(0,0,0,0.6) !important;
 }
 
-/* Universal button style for Contact Us and Submit */
 .contact-btn,
 .contact-form .contact-btn,
 .hero .contact-btn {
@@ -1730,7 +1691,6 @@ body.menu-open {
     transform: translateY(-2px) scale(1.03);
 }
 
-/* Make contact form submit hover use #13131A (dark) */
 .contact-form .contact-btn:hover,
 .contact-btn[type="submit"]:hover,
 button[type="submit"].contact-btn:hover,
@@ -1740,7 +1700,6 @@ button[type="submit"].contact-btn:hover,
     border-color: #13131A !important;
 }
 
-/* Home section: text and button color adjustments */
 .hero h1,
 .hero p,
 .hero span {
@@ -1753,14 +1712,12 @@ button[type="submit"].contact-btn:hover,
     border: 2px solid #13131A !important;
 }
 
-/* Hover state for clear interaction */
 .hero .contact-btn:hover {
     background: #13131A !important;
     color: #ffffff !important;
     transform: translateY(-2px) scale(1.03);
 }
 
-/* Contact card / "Get in touch" color and border overrides */
 .contact-info h3 {
     color: #13131A !important;
     border-bottom: 4px solid #13131A !important;
@@ -1772,19 +1729,16 @@ button[type="submit"].contact-btn:hover,
     border-color: #13131A !important;
 }
 
-/* inputs focus border */
 .contact-inputs:focus {
     border: 2px solid #13131A !important;
 }
 
-/* small decorative line under section headings if present */
 .section::before {
     background: linear-gradient(90deg, var(--primary-color), #13131A, var(--accent-pink));
     opacity: 1;
 }
 
 @media (max-width: 768px) {
-    /* Stack rows vertically and center everything */
     .team-members {
         display: flex;
         flex-direction: column;
@@ -1805,7 +1759,6 @@ button[type="submit"].contact-btn:hover,
         box-sizing: border-box;
     }
 
-    /* Ensure each member centers and has a reasonable max width */
     .team-row .member {
         width: 100%;
         max-width: 320px;
@@ -1826,8 +1779,8 @@ button[type="submit"].contact-btn:hover,
         align-items: center;
         gap: 1.25rem;
         padding: 5.5rem 1.25rem 2rem;
-        background: rgba(255,255,255,0.12);             /* translucent base */
-        backdrop-filter: blur(8px) saturate(120%);       /* blur + slight saturation */
+        background: rgba(255,255,255,0.12);           
+        backdrop-filter: blur(8px) saturate(120%);      
         -webkit-backdrop-filter: blur(8px) saturate(120%);
         border-top: 1px solid rgba(255,255,255,0.06);
         z-index: 1200;
@@ -1843,7 +1796,7 @@ button[type="submit"].contact-btn:hover,
         pointer-events: auto;
     }
 
-    /* keep link visuals readable on the frosted background */
+    
     .nav-links a {
         color: #13131A;
         background: transparent;
@@ -1851,7 +1804,7 @@ button[type="submit"].contact-btn:hover,
         border-radius: 8px;
     }
 
-    /* subtle backdrop close affordance */
+    
     .nav-links::before {
         content: "";
         position: absolute;
@@ -1862,7 +1815,6 @@ button[type="submit"].contact-btn:hover,
     }
 }
 
-/* Ensure name/email/message input text uses #13131A */
 .contact-inputs,
 input.contact-inputs,
 textarea.contact-inputs,
@@ -1872,14 +1824,12 @@ input[type="email"].contact-inputs {
     caret-color: #13131A !important;
 }
 
-/* Subtle placeholder color */
 .contact-inputs::placeholder,
 input.contact-inputs::placeholder,
 textarea.contact-inputs::placeholder {
     color: rgba(19, 19, 26, 0.45) !important;
 }
 
-/* Keep focus / active state consistent */
 .contact-inputs:focus,
 input.contact-inputs:focus,
 textarea.contact-inputs:focus {
@@ -1888,9 +1838,7 @@ textarea.contact-inputs:focus {
     border-color: #13131A !important;
 }
 
-/* Home section: use supplied hero image as background (only for #home) */
 .section#home {
-    /* update path if you store the file in images/ */
     background-image: url("wmremove-transformed.jpeg"), linear-gradient(#FAF4F4, #FAF4F4);
     background-repeat: no-repeat;
     background-size: cover;
@@ -1906,7 +1854,6 @@ textarea.contact-inputs:focus {
     z-index: 0;
 }
 
-/* Avoid fixed attachment on mobile for performance/placement */
 @media (max-width: 768px) {
     .section#home {
         background-attachment: scroll;
@@ -1914,14 +1861,12 @@ textarea.contact-inputs:focus {
     }
 }
 
-/* Home: sharper background + contrast overlay, readable white text */
 .section#home {
     background-image:
-        /* dark overlay for contrast */
         linear-gradient(rgba(7,6,10,0.48), rgba(7,6,10,0.28)),
         url("wmremove-transformed.jpeg");
     background-repeat: no-repeat;
-    background-size: cover;         /* keep cover for full-bleed look */
+    background-size: cover;        
     background-position: center center;
     min-height: 100vh;
     width: 100%;
@@ -1933,7 +1878,6 @@ textarea.contact-inputs:focus {
     z-index: 0;
 }
 
-/* Make the hero text and button clearly visible on top of the image */
 .section#home .hero h1,
 .section#home .hero p,
 .section#home .hero .contact-btn {
@@ -1941,13 +1885,11 @@ textarea.contact-inputs:focus {
     text-shadow: 0 4px 18px rgba(0,0,0,0.6);
 }
 
-/* Button border adjusted for better contrast */
 .section#home .hero .contact-btn {
     background: transparent !important;
     border: 2px solid rgba(255,255,255,0.9) !important;
 }
 
-/* Slightly stronger overlay on small screens (image crops more) */
 @media (max-width: 768px) {
     .section#home {
         background-image:
@@ -1955,63 +1897,4 @@ textarea.contact-inputs:focus {
             url("wmremove-transformed.jpeg");
         background-position: center top;
     }
-}
-
-/* Restore home section background image and overlay */
-#home,
-#home.section,
-.section#home {
-    background: none !important;
-    background-image:
-        linear-gradient(rgba(7,6,10,0.48), rgba(7,6,10,0.28)),
-        url("wmremove-transformed.jpeg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    min-height: 100vh;
-    width: 100%;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 0;
-    animation: fadeInBg 1.2s cubic-bezier(.4,0,.2,1);
-}
-
-/* Animation for background fade-in */
-@keyframes fadeInBg {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* Home hero text and button: white with shadow for readability */
-.section#home .hero h1,
-.section#home .hero p,
-.section#home .hero .contact-btn {
-    color: #ffffff !important;
-    text-shadow: 0 4px 18px rgba(0,0,0,0.6);
-}
-
-.section#home .hero .contact-btn {
-    background: transparent !important;
-    border: 2px solid rgba(255,255,255,0.9) !important;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.10), 0 1.5px 0 #fff;
-}
-
-.section#home .hero .contact-btn:hover {
-    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-}
-
-/* Make home section hero text and button text black */
-.section#home .hero h1,
-.section#home .hero p,
-.section#home .hero .contact-btn {
-    color: #13131A !important;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.10), 0 1px 0 #fff;
-}
-
-/* Make the "Contact Us" button border black */
-.section#home .hero .contact-btn {
-    border: 2px solid #13131A !important;
 }
