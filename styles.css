@@ -2010,3 +2010,8 @@ textarea.contact-inputs:focus {
     color: #13131A !important;
     text-shadow: 0 2px 8px rgba(0,0,0,0.10), 0 1px 0 #fff;
 }
+
+/* Make the "Contact Us" button border black */
+.section#home .hero .contact-btn {
+    border: 2px solid #13131A !important;
+}
